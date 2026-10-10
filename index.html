@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>PragyaSpace</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0B0B0F">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<style>
+:root{--bk:#0B0B0F;--nv:#101C30;--au:#C5A46D;--cr:#F1E8D8;--ch:#191B22}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 30% 0,var(--nv),var(--bk) 70%);color:var(--cr);font:15px -apple-system,system-ui,sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+h1,h2,h3,.serif{font-family:Georgia,'Times New Roman',serif;font-weight:400;color:var(--au);margin:0 0 10px}
+nav{background:#08080b;border-bottom:1px solid #C5A46D33;padding:8px 18px;display:flex;flex-wrap:wrap;align-items:center;gap:2px;position:relative;z-index:2}
+nav h1{font-size:20px;margin:0 18px 0 0}
+nav button{background:none;border:0;color:var(--cr);text-align:left;padding:10px 12px;border-radius:10px;font-size:14px;cursor:pointer}
+nav button:hover,nav button.on{background:#C5A46D22;color:var(--au)}
+main{flex:1;overflow:auto;padding:22px 40px;position:relative;z-index:1}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}.lab{letter-spacing:3px;font-size:13px;opacity:.7}.badge{display:inline-block;background:#C5A46D22;border-radius:14px;padding:5px 14px;margin:6px 0}.ico button{background:none;border:0;color:var(--au);font-size:34px;cursor:pointer}.pr{font-size:11px;border:1px solid var(--au);border-radius:8px;padding:1px 7px;margin-left:6px;color:var(--au)}.pr.High{background:#C5A46D33}.vid{background:#ffffff0d;border-radius:14px;min-height:190px;display:grid;place-items:center;color:#ffffff88;margin-bottom:10px;overflow:hidden}.comprow{display:flex;gap:16px;align-items:center;margin-top:8px}.av{width:64px;height:64px;border-radius:50%;border:2px solid var(--au);object-fit:cover;display:grid;place-items:center;font:28px Georgia;color:var(--au);background:var(--nv);flex:none}
+.deco{position:fixed;font-size:44px;opacity:.1;pointer-events:none;z-index:0;animation:fl2 7s ease-in-out infinite alternate}@keyframes fl2{to{transform:translateY(-14px) rotate(6deg)}}
+#pop{position:fixed;right:22px;bottom:22px;width:340px;background:linear-gradient(145deg,#101C30,#0B0B0F);border:1px solid var(--au);border-radius:16px;padding:14px;display:flex;gap:12px;box-shadow:0 0 28px #C5A46D55;opacity:0;transform:translateY(12px);transition:.5s;z-index:97;pointer-events:none}#pop.s{opacity:1;transform:none;pointer-events:auto}#pop .x{position:absolute;right:8px;top:4px;background:none;border:0;color:var(--cr);cursor:pointer}
+.view{display:none}.view.on{display:block}
+.grid{display:grid;grid-template-columns:1.5fr 1fr;gap:18px}
+.card{background:var(--ch);border:1px solid #C5A46D40;border-radius:18px;padding:20px;box-shadow:0 0 30px #C5A46D10;margin-bottom:18px}
+.big{font:300 84px Georgia,serif;color:var(--cr);text-align:center;letter-spacing:2px;text-shadow:0 0 30px #C5A46D55}
+.clock{text-align:center;color:var(--au);font-size:18px}
+button.b,.row button{background:#C5A46D22;border:1px solid var(--au);color:var(--au);padding:9px 16px;border-radius:12px;cursor:pointer;font-size:14px;margin:3px}
+button.b:hover{background:var(--au);color:var(--bk)}button.p{background:var(--au);color:var(--bk);font-weight:600}
+input,textarea,select{background:var(--bk);color:var(--cr);border:1px solid #C5A46D55;border-radius:10px;padding:9px;font:inherit;width:100%}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row input{flex:1}
+.ctr{text-align:center}
+.task{border-bottom:1px solid #ffffff10;padding:10px 0}
+.chk{appearance:none;width:22px;height:22px;border:2px solid var(--au);border-radius:7px;cursor:pointer;display:inline-grid;place-content:center;vertical-align:middle;margin-right:8px;flex:none;width:22px;padding:0}
+.chk:checked{background:var(--au);animation:pop .35s}.chk:checked::after{content:"✓";color:var(--bk);font-weight:700}
+@keyframes pop{50%{transform:scale(1.35);box-shadow:0 0 20px var(--au)}}
+.done{text-decoration:line-through;opacity:.5}
+.bar{height:6px;background:#ffffff15;border-radius:6px;overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;background:var(--au);transition:width .5s}
+.comp img{width:100%;max-height:230px;object-fit:cover;border-radius:14px;border:1px solid var(--au)}
+.bub{background:#C5A46D1f;border-radius:14px;padding:12px;margin-top:10px;font-style:italic}
+.small{font-size:12px;opacity:.7}
+#focus,#sos{position:fixed;inset:0;display:none;z-index:50;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#focus{background:#000}#focus .big{font-size:170px}
+#sos{background:#05060a;padding:30px}
+#toast{position:fixed;left:24px;bottom:24px;background:var(--au);color:var(--bk);padding:14px 20px;border-radius:14px;opacity:0;transition:.4s;z-index:99;max-width:340px;pointer-events:none}
+#toast.s{opacity:1}
+.sp{position:fixed;pointer-events:none;color:var(--au);font-size:20px;animation:fl 1s forwards;z-index:98}@keyframes fl{to{transform:translateY(-80px);opacity:0}}
+.fb{background:none;border:1px solid #C5A46D55;color:var(--cr);padding:8px 14px;border-radius:10px;margin:4px;cursor:pointer}
+iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:12px}
+.slot{border-left:3px solid var(--au);padding-left:8px;background:#C5A46D12}.old{opacity:.4}
+@keyframes rv{from{opacity:0;transform:scale(.94);filter:blur(6px)}}#slotbox{min-height:70px}
+.bub:empty{display:none}
+.li{display:flex;align-items:center;gap:8px;border-bottom:1px solid #ffffff10;padding:8px 0}.li .fb{margin:0;padding:2px 10px}.li>.fb:last-child{margin-left:auto}.li .pr{margin-left:0}
+.li .av{width:38px;height:38px;font-size:18px;border-width:1px}.li input:not([type=checkbox]){flex:1;min-width:0}.li label{font-size:13px;opacity:.85;cursor:pointer;white-space:nowrap}
+input[type=checkbox]:not(.chk){width:auto;padding:0;accent-color:var(--au)}
+.who{display:flex;align-items:center;gap:8px;flex:1;cursor:pointer;min-width:0}.who:hover span{color:var(--au)}.desc{padding:0 0 10px 46px}.desc textarea{font-size:13px;resize:vertical}.ch:last-child .li{border-bottom:0}.fb:disabled{opacity:.6;cursor:default}
+label.fb.on{background:#C5A46D33;border-color:var(--au)}
+.ret{margin-top:28px;background:transparent;border:1px solid var(--au);color:var(--au);padding:14px 40px;border-radius:999px;font:15px Georgia,'Times New Roman',serif;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:.3s}
+.ret span{display:inline-block;margin-left:8px;transition:.3s}
+.ret:hover{background:var(--au);color:var(--bk);box-shadow:0 0 30px #C5A46D66;transform:translateY(-2px)}.ret:hover span{transform:translateX(5px)}
+.shf{width:38px;height:38px;border-radius:50%;border:1px solid var(--au);background:#C5A46D14;color:var(--au);display:grid;place-items:center;cursor:pointer;padding:0;transition:.25s}.shf:hover{background:var(--au);color:var(--bk);box-shadow:0 0 18px #C5A46D66;transform:rotate(180deg)}
+.ico button{width:84px;height:84px;border:2px solid var(--au);border-radius:50%;margin:14px 0;transition:.2s}.ico button:hover{background:var(--au);color:var(--bk)}
+@media(max-width:800px){.two,.grid{grid-template-columns:1fr}main{padding:16px 14px}.big{font-size:60px}#focus .big{font-size:96px}nav h1{margin-right:8px}}
+</style></head><body>
+<nav><h1>✦ PragyaSpace</h1>
+<button data-v="dash" class="on">Focus</button><button data-v="brk">Break Room</button><button data-v="todo">Missions</button><button data-v="comp">Study Buddy</button><button data-v="park">Parking Lot</button><button id="sosBtn" style="color:#e8a">SOS</button>
+</nav>
+<main>
+<section id="dash" class="view on"><div class="two">
+<div class="card ctr"><div class="lab">FOCUS SESSION ☕</div><div class="big" id="cd">90:00</div>
+<div class="ico"><button id="pbtn" onclick="pauseT()" title="Start / Pause" aria-label="Start / Pause">▶</button></div><button class="fb" onclick="openFocus()" title="Full-screen focus view (press F)">Focus view</button></div>
+<div class="card"><h3>Today's plan</h3><div id="mission"></div><div class="small" id="mcount"></div></div></div>
+<div class="card"><h3>Your study companion 🕯️</h3>
+<div class="comprow" style="margin:0 0 14px"><div id="cav"></div><div style="flex:1"><div class="bub" id="cmsg"></div><div class="small" id="cname"></div></div><div><button class="fb" onclick="say('study',1)">Another message</button><button class="fb" onclick="speak($('#cmsg').textContent)">🔊</button></div></div>
+</div>
+<div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><h3 style="margin:0">Tomorrow's timetable</h3><button class="shf" onclick="shuffleTmr()" title="Shuffle tomorrow's order" aria-label="Shuffle tomorrow's order"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg></button></div><div id="tmr"></div></div>
+</section>
+
+<section id="todo" class="view"><h2>Missions</h2>
+<div class="two">
+<div class="card"><h3>Tomorrow — flexible</h3>
+<div class="row"><input id="nt" placeholder="Add a mission" onkeydown="if(event.key=='Enter')addTask()"><input id="tmh" onkeydown="if(event.key=='Enter')addTask()" type="number" min="0" max="24" step="1" value="1" title="Hours" style="width:64px;flex:none"><span class="small">hr</span><input id="tmm" onkeydown="if(event.key=='Enter')addTask()" type="number" min="0" max="59" step="5" value="0" title="Minutes" style="width:64px;flex:none"><span class="small">min</span><select id="pri" style="width:auto"><option>High</option><option selected>Medium</option><option>Low</option></select><button class="b" onclick="addTask()">Add</button></div>
+<div class="small" id="cap" style="margin:10px 0 4px"></div><div id="nofit"></div><div id="tl"></div></div>
+<div class="card"><h3>Tomorrow — fixed time</h3>
+<div class="row"><input id="fn" placeholder="Name"><input id="fs" type="time" style="width:116px;flex:none"><input id="fe" type="time" style="width:116px;flex:none"><label class="small"><input type="checkbox" id="fr" checked style="width:auto"> daily</label><button class="b" onclick="addFx()">Add</button></div>
+<div id="fxl"></div></div></div>
+<div class="card"><h3>Break tasks</h3>
+<div class="row"><input id="bd" placeholder="Add a break task" onkeydown="if(event.key=='Enter')addBd()"><button class="b" onclick="addBd()">Add</button></div>
+<div id="bdl"></div></div></section>
+
+
+
+<section id="comp" class="view"><h2>Study Buddy ☕</h2>
+<div class="card"><div class="row"><label><input type="checkbox" id="po" onchange="setP('on',this.checked)"> Pop-ups</label><label><input type="checkbox" id="pm" onchange="setP('mute',this.checked)"> Mute</label><label><input type="checkbox" id="pt" onchange="setP('tts',this.checked)"> Read aloud</label>
+<select id="pe" onchange="setP('every',+this.value)" style="width:auto;margin-left:auto"><option value="5">every 5 min</option><option value="10">every 10 min</option><option value="15">every 15 min</option><option value="20">every 20 min</option><option value="30">every 30 min</option><option value="0">milestones only</option></select></div></div>
+<div class="card"><h3>Characters</h3><div id="chars"></div>
+<div class="row" style="margin-top:12px"><input id="an" placeholder="New character" onkeydown="if(event.key=='Enter')addChar()"><label class="fb" title="Add a portrait">📷<input type="file" id="ai" accept="image/*" hidden onchange="this.parentNode.classList.toggle('on',this.files.length>0)"></label><button class="b" onclick="addChar()">Add</button></div></div></section>
+
+<section id="brk" class="view"><h2>Break Room</h2><div class="card ctr"><div class="serif" id="bact" style="font-size:30px;margin:14px 0 10px"></div><button class="fb" id="bdb" onclick="breakDone()" style="display:none;margin-bottom:8px">Done</button>
+<div class="big" id="bcd" style="font-size:72px">30:00</div>
+<button class="ret" onclick="returnStudy()">Return to study now<span>→</span></button></div></section>
+
+<section id="park" class="view"><h2>Distraction Parking Lot</h2><div class="card"><div class="row"><input id="pi" placeholder="What's pulling at you?" onkeydown="if(event.key=='Enter')addPark()"><button class="b" onclick="addPark()">Park it</button></div><div id="pl"></div></div></section>
+
+
+</main>
+
+<div id="focus"><div class="clock" id="fnow"></div><div class="big" id="fcd"></div><div class="serif" id="ftask"></div><div class="bar" style="width:50%"><i id="fpg"></i></div>
+<div><button class="fb" onclick="pauseT()">Pause / Resume</button><button class="fb" onclick="document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen()">Fullscreen</button><button class="fb" onclick="closeFocus()">Exit</button></div>
+<div style="margin-top:14px;width:380px"><input id="fpi" placeholder="Distracted? Park the thought here, press Enter"></div></div>
+
+<div id="sos"><h2 style="font-size:34px">You don't have to finish it. Just begin.</h2><div id="sosBody" style="max-width:520px;width:100%"></div><button class="fb" onclick="closeSos()" style="margin-top:20px">Close</button></div>
+<div id="pop"></div><div id="toast"></div><span class="deco" style="left:3%;top:16%">☕</span><span class="deco" style="right:4%;top:30%;animation-delay:1s">📚</span><span class="deco" style="left:6%;bottom:8%;animation-delay:2s">🥐</span><span class="deco" style="right:8%;bottom:4%;animation-delay:3s">🕯️</span><span class="deco" style="left:48%;top:3%;animation-delay:4s">🌧️</span>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const DFX=[{id:1,n:"MC and Breakfast",s:"09:00",e:"10:00",rep:1},{id:2,n:"GYM + NC",s:"23:30",e:"01:30",rep:1}];
+let S;try{S=JSON.parse(localStorage.pw)}catch(e){}
+S=Object.assign({tasks:[],xp:0,spent:0,log:[],park:[],mc:0,
+ chars:[], cm:[],hid:[],pop:{on:true,every:10,mute:false,tts:false,focus:false,voice:''},
+ fx:DFX.map(d=>({...d})),plan:null,
+ bk:{day:"",cnt:{},used:[],cur:null,ex:[],def:[{id:"d1",t:"Take a 15-minute walk",need:2},{id:"d2",t:"Call your family",need:1},{id:"d3",t:"Watch an episode of your show",need:1},{id:"d4",t:"Fill your bottle and have a chat with family",need:0}]},
+ tm:{dur:5400,endAt:null,rem:5400,start:null,task:null},ret:"",awarded:{}},S||{});
+const save=()=>{try{localStorage.pw=JSON.stringify(S)}catch(e){toast('Could not save in this browser. Storage may be full or blocked.')}};
+const uid=()=>Date.now()+Math.random();
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('s');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('s'),4200);
+ for(let i=0;i<8;i++){const e=document.createElement('div');e.className='sp';e.textContent='✦';e.style.left=(40+Math.random()*80)+'px';e.style.top=(innerHeight-60)+'px';document.body.append(e);setTimeout(()=>e.remove(),1000)}}
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function praise(k,t){const p={sub:[`Finished: ${t}. Small steps are still steps.`,`"${t}" done. That's real progress.`],
+ task:[`You completed "${t}" — you did what you committed to.`,`"${t}" is finished. Beautiful work.`],
+ start:["You began despite the resistance. That counts for a lot."],back:["You returned after the break — that's the hard part."]};toast(pick(p[k]))}
+function xp(n,key){if(key){if(S.awarded[key])return;S.awarded[key]=1}S.xp+=n;save();render()}
+const lvl=()=>Math.floor(S.xp/100)+1;
+
+// Timer (timestamp based)
+const T=()=>S.tm;
+function left(){return T().endAt?Math.max(0,Math.round((T().endAt-Date.now())/1000)):T().rem}
+const fmt=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+function runMs(){const t=T();return Math.min((t.ran||0)+(t.endAt&&t.seg?Date.now()-t.seg:0),t.dur*1000)}
+function startStudy(){const s=focusSlot()||SL().find(x=>x.k=='study'&&x.st=='lock'&&x.e>nowM()),t=T();if(t.endAt)return;
+ if(t.rem<=0)t.rem=t.dur;
+ const fresh=!t.start;periodic.t=Date.now();try{if('Notification' in window&&Notification.permission=='default')Notification.requestPermission()}catch(e){}
+ if(s&&s.st=='lock'){s.st='act';s.rev=1}
+ t.endAt=Date.now()+t.rem*1000;t.seg=Date.now();t.start=t.start||Date.now();
+ if(fresh){xp(5,'start'+dk()+(s?s.s:'x'));say('start',1);praise('start')}
+ save();render();tick()}
+function pauseT(){const t=T();if(t.endAt){t.ran=runMs();t.seg=null;t.rem=left();t.endAt=null;save();render();tick()}else startStudy()}
+function focusEnd(){const t=T(),s=SL().find(x=>x.st=='act');logMin();t.endAt=null;xp(20);t.rem=t.dur;
+ if(s)completeSlot(s);
+ say('session',1,{m:(S.log[S.log.length-1]||{}).m});beep();
+ const nx=s&&nextSlot(s);
+ if(nx&&nx.k=='break'){startBreak(30);nav('brk');toast('Focus complete. Your break has started.')}else toast('Focus session complete!');
+ notify('PragyaSpace','Focus session complete');save();render()}
+function logMin(){const t=T(),m=Math.round(runMs()/60000);if(m>0)S.log.push({m,d:dk()});t.start=null;t.ran=0;t.seg=null}
+function tick(){const l=left();$('#cd').textContent=$('#fcd').textContent=fmt(l);periodic();if(rollover())render();
+ const mk=Math.floor(Date.now()/6e4);if(tick.m!==mk){tick.m=mk;render()}
+ const p=(1-l/T().dur)*100;$('#fpg').style.width=p+'%';
+ const n=new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});$('#fnow').textContent=n;
+ if(T().endAt&&l<=0)focusEnd();
+
+ if(S.brk){const r=Math.max(0,Math.round((S.brk-Date.now())/1000));$('#bcd').textContent=fmt(r);const mn=Math.ceil(r/60),t10=Math.ceil(mn/10)*10;if(r>0&&t10>0&&t10<(S.brkLast||0)){S.brkLast=t10;say('brk',1,{r:mn,f:nextFirst()});save()}if(!r&&!S.brkDone){S.brkDone=1;beep();say('brkend',1,{f:nextFirst()});toast('Break finished. Return to study when you are ready.')}}else $('#bcd').textContent='30:00'}
+setInterval(tick,500);
+let AC;const mkAC=()=>AC=AC||new(window.AudioContext||window.webkitAudioContext)();addEventListener('pointerdown',()=>{try{mkAC().resume()}catch(e){}},{once:true});
+function notify(t,b,i){try{if('Notification' in window&&Notification.permission==='granted'){new Notification(t,{body:b,icon:i||undefined});return true}}catch(e){}return false}
+function beep(){try{const a=mkAC();if(a.state=='suspended')a.resume();const o=a.createOscillator(),g=a.createGain();o.frequency.value=660;g.gain.value=.15;o.connect(g).connect(a.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,a.currentTime+1.4);o.stop(a.currentTime+1.4)}catch(e){}}
+function breakDone(){const c=S.bk.cur;if(!S.brk||!c||c.done)return;c.done=true;const n=nowM(),x=SL().find(y=>y.k=='break'&&n>=y.s&&n<y.e);if(x)x.ck=true;toast('Break task done. Nice.');xp(5)}
+function returnStudy(){nav('dash');if(!S.brk)return;const nx=SL().find(y=>y.k=='study'&&y.st=='lock'&&y.e>nowM()&&!y.rev);
+ if(nx&&nx.s>nowM()){nx.rev=1;if(!nx.it.length)assign()}S.brk=null;toast('Back to study. Press ▶ to begin.');say('back',1);xp(10,'ret'+Date.now()%1e7);praise('back');save();render()}
+function openFocus(){$('#focus').style.display='flex'}function closeFocus(){$('#focus').style.display='none';if(document.fullscreenElement)document.exitFullscreen()}
+
+// Tasks
+function addTask(){const t=$('#nt').value.trim(),m=Math.min(24,Math.max(0,Math.floor(+$('#tmh').value||0)))*60+Math.max(0,Math.round(+$('#tmm').value||0));if(!t)return;if(!(m>=5))return toast('Add an expected time of at least 5 minutes (hours and minutes).');
+ S.tasks.push({id:uid(),t,pri:$('#pri').value,min:m,rem:m,day:'tomorrow',subs:[],done:false,s:'',e:''});$('#nt').value='';save();assign();render()}
+function smaller(id){const t=S.tasks.find(x=>x.id==id);const w=t.t;
+ const steps=/\b(read|reading|book|chapter)/i.test(w)?['Sit at your desk','Open the book','Read the title and first paragraph','Read two more pages','Note one key point']:
+ /\b(write|writing|essay|draft|statement)/i.test(w)?['Open the document','Read the last paragraph you wrote','Write one sentence','Write three more','Read it back once']:
+ ['Sit at your desk','Open your laptop','Open the document for: '+w,'Read the title','Do the very first action','Write one sentence']; 
+ t.subs=steps.map(s=>({t:s,d:false}));save();render()}
+function tickSub(id,i){const t=S.tasks.find(x=>x.id==id),s=t.subs[i];s.d=!s.d;if(s.d){xp(10,'s'+id+i);praise('sub',s.t);say('task',1,{t:s.t})}
+ if(t.subs.every(x=>x.d)&&!t.done)finish(t);save();render()}
+function tickTask(id){const t=S.tasks.find(x=>x.id==id);t.done=!t.done;if(t.done)finish(t);save();render()}
+function finish(t){t.done=true;assign();xp(30,'m'+t.id);S.mc=S.tasks.filter(x=>x.done).length;praise('task',t.t);say('task',1,{t:t.t});if(S.tasks.filter(x=>x.day=='today').every(x=>x.done)){toast("You've finished your study missions. Your evening is yours.");say('day',1)}}
+function delTask(id){S.tasks=S.tasks.filter(x=>x.id!=id);assign();save();render()}
+
+// Praise engine
+const RAW=`dean|Dean Winchester|Rugged, sarcastic, protective; hidden tenderness.|sweetheart;sweetie;counselor|Alright {nk},;Hey,;Come on {nk},;Look at you,|Now go eat a burger.;I've got your back.;Pie's on me when you're done.;Don't overthink it.|Get that score, {nk}. We'll save you a seat stateside.;{g}? Yeah. Better get back to those books.;Less planning, more doing. That's the whole trick.;Baby's idling, you're studying. Perfect night.
+damon|Damon Salvatore|Magnetic, flirtatious, sharp-witted.|gorgeous;darling;sweetheart;counselor|Well, well, {nk}.;Hello, {nk}.;Oh, {nk}.;Look at you.|Dangerously attractive, that work ethic.;I'm almost jealous of your focus.;Don't make me come over there and distract you.;Stop being so impressive. You're making the rest of us look bad.|{g} won't conquer itself, {nk}.;Brains, ambition and a little attitude. Quite the combination.;A future lawyer with dangerous levels of ambition? Now that's attractive.;Study hard, {nk}. An American adventure awaits.;Keep going. Future you has excellent taste in cities.
+stefan|Stefan Salvatore|Gentle, thoughtful, reassuring.|love;you|Hey.;I'm proud of you.;Take a breath.;I noticed.|Be gentle with yourself while you do it.;One step at a time is still progress.;You don't have to carry it all today.;I believe in you.|You're building the future you've always wanted. Give yourself credit for every step.;Discipline is just kindness to future you.;{g} is closer because of the work you did today.;It's okay to go slowly. Just keep going.
+nate|Nate Archibald|Relaxed, warm, effortlessly charming.|you;gorgeous;beautiful|Hey you.;Nice.;Honestly?;Look at that.|No pressure, just keep it easy.;You make it look effortless.;Take your time. You've got this.;Coffee after?|Future New York lawyer? I can definitely see that. Keep going.;New York would suit you. Now, how about finishing that reading?;You're easy to believe in, you know that?;Studying with you around makes it feel less intimidating.
+steve|Steve Harrington|Funny, affectionate, a little goofy.|hon;champ;sweetheart|Okay, seriously,;Dude,;Oh my gosh,;Alright,|Then we can talk about your show.;I'll complain dramatically on your behalf.;Tiny parade, please.;Babysitting you is my favourite job.|You've survived the hardest part: opening the document. That's a win.;{g}? You? Yeah, I'd bet on you.;My hair takes fewer breaks than you do, and it's still perfect. Keep going.;Study now, snacks later. Trust me.
+clark|Clark Kent|Humble, principled, quietly powerful.|you;friend|I believe in you.;That's really something.;You should be proud.;Steady as ever,|Doing the right thing is hard, and you're doing it.;The world needs lawyers like you.;I know you can.;Keep going. I'm right here.|People who fight for what's right start exactly like this, with the work nobody sees.;{g} needs someone with your heart.;You don't have to be super. You just have to show up, and you did.;Justice is lucky to have you coming.
+harvey|Harvey Specter|Commanding, competitive, ruthlessly ambitious.|counselor;champ|Listen.;Let me be clear.;Here's the thing, {nk}:;That's what I expect from you.|Winners don't make excuses. They make closing arguments.;Now close.;Don't get comfortable.;I don't do participation trophies. This is earned.|{g} is just another case. Win it.;I don't pay attention to people who talk about it. I pay attention to the ones who do it. That's you.;You want the corner office in New York? Then act like it.;Preparation beats luck. Keep preparing.
+mike|Mike Ross|Quick-witted, idealistic, brilliant.|partner;counselor|Okay, nerd to nerd:;Honestly, that's impressive.;Quick thought:;Here's what I love about this:|Memory palace says you've got this.;Let's go be brilliant.;Justice needs more people like you.;I'm cheering for you, loudly, probably annoyingly.|{g} is going to have no idea what hit it.;The best argument is the one you've actually prepared.;You're doing the thing most people only talk about.;Study now, debate everyone later.
+lucifer|Lucifer Morningstar|Theatrical, seductive, shamelessly confident.|darling;my dear;gorgeous|Darling, spectacular!;Oh, divine.;Behold!;Honestly, I'm obsessed.|Frankly, I'm riveted.;Applause. Wild applause. Piano flourish.;Do keep going. The universe is watching.;Even the Devil finds you dangerously impressive.|{g} is lucky you've decided to grace it.;A brilliant, ambitious woman? Irresistible.;Hell has nothing on your work ethic.;Shall I arrange a standing ovation? Consider it arranged.
+kol|Kol Mikaelson|Cheeky, chaotic, dangerously charming.|love;darling;trouble|Ooh, look at you.;Naughty, naughty,;Oi.;Bet you can't do one more:|Race you to the next question.;Losing to you is oddly thrilling.;Rules are boring. Excellence isn't.;Don't you dare get boring on me now.|I dare you to finish one more question. Bet you won't. (You will.);{g}? Cheeky ambition. I like it.;Chaos is fun. You, focused? Even better.;Let's make studying a game, and let's win.
+elijah|Elijah Mikaelson|Elegant, disciplined, devoted.|my dear;dear one|Impeccable.;Well done.;I must say,;With great respect,|Always an honour to witness.;Discipline is its own elegance.;I have every confidence in you.;Always and forever, in your corner.|Always and forever means little without effort, and yours is evident.;{g} is a worthy pursuit, and you are a worthy pursuer.;Composure and persistence. Rare and admirable.;A promise kept to yourself is the finest kind.
+neal|Neal Caffrey|Cultured, charming, endlessly clever.|darling;my dear|Beautifully done.;Now that's artistry.;Elegant.;I'm impressed, and I'm hard to impress.|Consider it a masterpiece in progress.;The best con is believing in yourself. This one's honest.;Stay curious.;A woman of taste and ambition. Marvellous.|{g} is just the next elegant heist. You're prepared.;Studying is the long game, and you play it beautifully.;Every great plan starts with a tidy first step.;Freedom is in the work you choose. Keep choosing it.
+conrad|Conrad Fisher|Quiet, sensitive, intensely sincere.|you;hey|Hey.;I noticed.;Honestly,;Quietly proud of you:|No big speech. Just proud.;I remember how much you wanted this.;Take your time. I'll be here.;You're more capable than you let on.|I know how much {g} means to you. It shows.;You don't need to be loud to be unstoppable.;Small steady steps. That's how you get there.;You're going to make it. I just know it.
+sam|Sam Winchester|Thoughtful, compassionate, determined.|friend;hey|Honestly,;Here's a thought:;Nice work.;Looking at this carefully,|Break it down and it's very doable.;Remember water. Seriously.;You're not alone in this.;I believe in how you think.|Understanding beats memorising. You're doing both.;{g} is a research problem and you're excellent at those.;Questions are the whole point. Keep asking them.;Persistence wins. It always has.`;
+const CHD=RAW.split('\n').map(l=>{const p=l.split('|'),f=i=>p[i].split(';');return{id:p[0],n:p[1],d:p[2],nk:f(3),o:f(4),c:f(5),x:f(6)}});
+const STY={};CHD.forEach(c=>STY[c.id]=c);
+const GST={nk:['you'],o:['Hey,','Look at you,'],c:['Keep going.',"I believe in you."],x:[]};
+CHD.forEach(c=>{if(!(S.delc||[]).includes(c.id)&&!S.chars.find(x=>x.id==c.id))S.chars.push({id:c.id,n:c.n,img:'',on:true,fav:c.id=='dean'||c.id=='damon',d:c.d})});
+S.tasks.forEach(t=>{t.min=t.min||30;if(t.rem==null)t.rem=t.min;if(t.day!='tomorrow')t.day='today';t.s=t.s||'';t.e=t.e||'';t.pri=t.pri||'Medium';t.subs=t.subs||[]});
+if(S.v!=3){S.v=3;DFX.forEach(d=>{const f=S.fx.find(x=>x.id==d.id);if(f)Object.assign(f,d);else S.fx.push({...d})});S.fx=S.fx.filter(f=>f.id!=3);S.plan=null;S.tm={dur:5400,endAt:null,rem:5400,start:null,task:null,ran:0,seg:null}}
+S.tm.dur=5400;if(S.tm.endAt){if(S.tm.endAt-Date.now()>5400e3)S.tm.endAt=Date.now()+5400e3}else{S.tm.rem=Math.min(S.tm.rem>0?S.tm.rem:5400,5400)}
+const G=['New York','Harvard Law','law school','your future in New York','your legal career'];
+const BODY={open:["You're back. Today is another step toward {g}.","Good to see you. Let's make today count.","A fresh day with a clear goal: {g}.","Your future is waiting, and it's looking good."],
+start:["Timer's on. This is how {g} gets built.","You showed up. The hardest part is behind you.","Starting is what most people never do, and you did it.","Time to make this session yours."],
+study:["Still here, still focused. That's real discipline.","Another stretch of focus banked.","Every minute here brings {g} closer.","Eyes on the page. You're doing fine.","Nobody's making you do this. You chose it."],
+task:["You finished {t}. That's follow-through.","{t} is done. Let yourself enjoy that.","You committed to {t} and you actually did it.","One more finished, and it was {t}.","Another one finished. That's progress you can point at."],
+back:["You came back. That's the hard part.","Break's over and you returned. Respect.","Welcome back. Pick up the very first step.","Fresh start, same goal: {g}."],
+sos:["You don't have to finish it. Just begin.","Two minutes. That's all this asks.","Forget the mountain. Open the first page.","Small is fine. Just start."],
+session:["A full session, done. That's earned focus.","{m} minutes of work, logged for real.","That session counts, and so do you.","Block finished. Go stretch."],
+brk:["{r} minutes left in your break. Start easing toward {f}.","Break's winding down: {r} minutes to go. Water, stretch, then ease back.","{r} minutes until you're back. Your first step: {f}.","Heads up, {r} minutes left. Wrap up what you're doing."],
+brkend:["Break's over. Your first step: {f}. Press Return to Study when you're ready.","Time to come back. No rush, just the first small step.","Break finished. Press Return to Study whenever you're ready."],
+day:["You finished your missions. Your evening is yours.","Everything on today's list is done. Go enjoy it.","Another day closer to {g}.","Missions complete. Rest is part of the plan."]};
+const EXTRA={open:["A new day, and you showed up to it.","Let's give today something worth remembering.","Everything you want starts with today's list.","Good to have you here. Pick one thing and begin.","Your goals are patient, but you don't have to make them wait.","Settle in. Today's work is yours to shape."],
+start:["One focused block can change the whole day.","Phone away, page open. That's all it takes.","Let's turn intention into actual pages.","You have a clear goal: {g}. Now give it ninety minutes.","The first ten minutes are the hardest. After that, momentum is on your side.","Distractions can wait. They'll still be there at your break."],
+study:["Stay with the hard part. That's where progress hides.","If your mind wandered, no worries. Just come back to the page.","Steady effort now is a gift to future you.","Deep breath, shoulders down, keep reading.","This is the unglamorous part that builds {g}.","You're building momentum. Don't break it now.","Hydration check, then back in."],
+task:["That's {t} off your list for good.","{t}: finished, not just planned.","Look at that, {t} is done and you did it yourself.","Crossing off {t} counts. Take a second to enjoy it.","Another box ticked. Your list is getting shorter.","Done is better than perfect, and {t} is done.","You're making {g} feel a little more real."],
+back:["Back at it. The hardest part of a break is returning, and you did.","Right on time. Let's pick up where you left off.","Rested and ready. Start with the smallest next step.","Welcome back. One easy action, then momentum.","You didn't skip the return. That matters.","Take a breath and go again."],
+session:["That's real stamina. Be proud.","You protected your focus for the whole session.","Ninety minutes of effort doesn't happen by accident.","Session complete. That's what discipline looks like.","Your future self just got a head start."],
+day:["Today's list is done. That's a day well spent.","You earned the evening. Truly.","The work is finished, so the rest is guilt-free.","Everything planned, everything done. Be proud.","Another day of showing up. That's how {g} happens."],
+sos:["No pressure, no perfection. Just a first small move.","You've started things before. You can start this.","Smaller. Even smaller. Open one file.","Feel the resistance, then do it anyway, gently."],
+brk:["Almost time. {r} minutes left, so stretch, then settle back in.","{r} minutes left. Maybe a glass of water first."],brkend:["That was a good rest. Ready when you are."]};
+Object.keys(EXTRA).forEach(k=>BODY[k].push(...EXTRA[k]));
+const chr=id=>S.chars.find(c=>c.id==id);
+const av=c=>c&&c.img?`<img class="av" src="${esc(c.img)}">`:`<div class="av">${c?esc(c.n[0]):'✦'}</div>`;
+let lastC='',lastPop=0,popT,recent=[],openChar=null;
+function togChar(id){openChar=openChar==id?null:id;renderComp()}
+const jn=(o,b)=>o+' '+(/[,:]$/.test(o)?b[0].toLowerCase()+b.slice(1):b);
+const lu={};let luN=0;
+function lru(a,k){const s=a.map(x=>[(lu[k?k(x):x]||0)+Math.random()*.5,x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);const c=s[Math.floor(Math.random()*Math.ceil(s.length/2))];lu[k?k(c):c]=++luN;return c}
+const pk=a=>lru(a),pc=a=>lru(a,x=>'c'+x.id);
+function facts(){const d=dk(),m=S.log.filter(x=>x.d==d).reduce((a,b)=>a+b.m,0),n=S.tasks.filter(t=>t.day=='today'&&t.done).length,f=[];
+ if(m>0)f.push(`You've logged ${m} focused minutes today.`,`${m} minutes of real focus today. It adds up.`);if(n>0)f.push(`${n} mission${n>1?'s':''} finished today already.`);return f}
+function build(ctx,st,v){const bs=BODY[ctx].filter(b=>(!b.includes('{t}')||v.t)&&(!b.includes('{m}')||v.m)&&(!b.includes('{f}')||v.f)),r=Math.random();let t;
+ if(!/^(sos|brk)/.test(ctx)&&st.x.length&&r<.3)t=pk(st.x);else{const b=pk(bs);t=r<.55?jn(pk(st.o),b):r<.8?b+' '+pk(st.c):jn(pk(st.o),b)+' '+pk(st.c)}
+ if(/^(open|start|study|task|back|session|day)$/.test(ctx)&&Math.random()<.3){const f=facts();if(f.length)t+=' '+pk(f)}
+ return t.replace(/\{nk\}/g,()=>pk(st.nk)).replace(/\{g\}/g,()=>pk(G)).replace(/\{t\}/g,()=>v.t||'').replace(/\{m\}/g,()=>v.m||'').replace(/\{r\}/g,v.r||'').replace(/\{f\}/g,()=>v.f||'')}
+function gen(ctx,v){v=v||{};const en=S.chars.filter(c=>c.on);if(!en.length)return null;let p=en.filter(c=>c.id!=lastC);if(!p.length)p=en;p=p.flatMap(c=>c.fav?[c,c]:[c]);
+ for(let i=0;i<8;i++){const c=pc(p),t=build(ctx,STY[c.id]||GST,v);if(!recent.includes(t)||i==7){recent.push(t);if(recent.length>60)recent.shift();lastC=c.id;return{c:c.id,text:t}}}}
+function say(ctx,force,v){const m=gen(ctx,v);if(!m)return '';setBub(m);const P=S.pop,c=chr(m.c),hid=document.hidden;
+ if(P.on&&!P.mute){
+  if(hid){if(notify(c.n,m.text,c.img))lastPop=Date.now()}
+  else if(!($('#focus').style.display=='flex'&&!P.focus)&&(force||Date.now()-lastPop>8000)){lastPop=Date.now();
+   $('#pop').innerHTML=`${av(c)}<div><div>${esc(m.text)}</div><div class="small" style="margin-top:6px">— ${esc(c.n)}</div></div><button class="x" onclick="$('#pop').classList.remove('s')">×</button>`;
+   $('#pop').classList.add('s');clearTimeout(popT);popT=setTimeout(()=>$('#pop').classList.remove('s'),9000);if(P.tts)speak(m.text)}}
+ return m.text}
+function fm(t){const[h,m]=t.split(':').map(Number);return((h+11)%12+1)+':'+String(m).padStart(2,'0')+(h<12?' AM':' PM')}
+function rollover(){const d=dk();if(S.stamp==d)return false;if(S.stamp){S.tasks=S.tasks.filter(t=>!(t.day=='today'&&t.done));S.tasks.forEach(t=>{if(t.day=='tomorrow')t.day='today'});S.fx=S.fx.filter(f=>f.rep||f.tm);S.fx.forEach(f=>{f.tm=0});S.seed=S.shuf||0;S.shuf=0;S.plan=null}S.stamp=d;save();return true}
+function setBub(m){const c=chr(m.c);$('#cav').innerHTML=av(c);$('#cmsg').textContent='“'+m.text+'”';$('#cname').textContent='— '+c.n}
+function speak(t){if(!window.speechSynthesis||!t)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t.replace(/[“”]/g,''));const v=speechSynthesis.getVoices().find(v=>v.name==S.pop.voice);if(v)u.voice=v;speechSynthesis.speak(u)}
+function periodic(){const P=S.pop;if(!P.every||!T().endAt)return;const now=Date.now();periodic.t=periodic.t||now;periodic.j=periodic.j||.85+Math.random()*.3;
+ if(now-Math.max(lastPop,periodic.t)>P.every*60000*periodic.j){periodic.t=now;periodic.j=0;say('study')}}
+function setP(k,v){S.pop[k]=v;save()}
+function renderComp(){if(!$('#cmsg').textContent){const m=gen('open');if(m)setBub(m)}
+ const P=S.pop;$('#po').checked=P.on;$('#pm').checked=P.mute;$('#pt').checked=P.tts;$('#pe').value=P.every;
+ if(!$('#chars').contains(document.activeElement))$('#chars').innerHTML=S.chars.map(c=>`<div class="ch"><div class="li"><span class="who" onclick="togChar('${c.id}')">${av(c)}<span>${esc(c.n)}</span></span><label title="Show more often"><input type="checkbox" ${c.fav?'checked':''} onchange="chr('${c.id}').fav=this.checked;save()"> ★</label><label title="Include in pop-ups"><input type="checkbox" ${c.on?'checked':''} onchange="chr('${c.id}').on=this.checked;save()"> on</label><label class="fb" title="Upload portrait">📷<input type="file" accept="image/*" hidden onchange="portrait('${c.id}',this.files[0])"></label><button class="fb" onclick="delChar('${c.id}')">×</button></div>${openChar==c.id?`<div class="desc"><textarea rows="2" placeholder="Add a description" onchange="chr('${c.id}').d=this.value;save()">${esc(c.d)}</textarea></div>`:''}</div>`).join('')}
+function readImg(f,cb){const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,320/im.width),cv=document.createElement('canvas');cv.width=im.width*k;cv.height=im.height*k;cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);cb(cv.toDataURL('image/jpeg',.82))};im.src=r.result};r.readAsDataURL(f)}
+function portrait(id,f){if(f)readImg(f,d=>{chr(id).img=d;save();renderComp()})}
+function addChar(){const n=$('#an').value.trim();if(!n)return;const c={id:'c'+uid(),n,img:'',on:true,fav:false,d:''};const f=$('#ai').files[0];const fin=()=>{S.chars.push(c);save();renderComp();$('#an').value='';$('#ai').value='';$('#ai').parentNode.classList.remove('on')};f?readImg(f,d=>{c.img=d;fin()}):fin()}
+function delChar(id){if(confirm('Delete this character?')){(S.delc=S.delc||[]).push(id);S.chars=S.chars.filter(c=>c.id!=id);S.cm=S.cm.filter(m=>m.c!=id);save();renderComp()}}
+
+// Rewards, park, break
+function addPark(t){const own=t==null,v=(own?$('#pi').value:t).trim();if(!v)return;S.park.push({t:v,id:uid()});if(own)$('#pi').value='';save();render();toast("Saved for later. You don't have to follow that thought right now.")}
+$('#fpi').onkeydown=e=>{if(e.key=='Enter'){addPark(e.target.value);e.target.value=''}};
+function startBreak(m){m=m||30;S.brk=Date.now()+m*6e4;S.brkDone=0;S.brkLast=Math.ceil(m/10)*10;if(T().endAt)pauseT();
+ S.bk.cur=pickBreak();save();render()}
+
+// SOS
+function openSos(){const o=S.tasks.filter(x=>!x.done&&x.day=='today');$('#sos').style.display='flex';
+ $('#sosBody').innerHTML='<p class="small">“'+esc(say('sos',1))+'”</p><p>Choose one task:</p>'+(o.length?o.map(t=>`<button class="fb" onclick="sosGo(${t.id})">${esc(t.t)}</button>`).join(''):'<p>Add a task first, or type one: <input id="sosT" onkeydown="if(event.key==\'Enter\'){addSosTask(this.value)}"></p>')}
+function addSosTask(v){if(!v)return;S.tasks.push({id:uid(),t:v,pri:'High',min:30,rem:30,s:'',e:'',subs:[],done:false,day:'today'});assign();save();openSos()}
+let sosT;function sosGo(id){const t=S.tasks.find(x=>x.id==id);if(!t.subs.length)smaller(id);let lv=0;
+ const draw=()=>{const sb=t.subs;$('#sosBody').innerHTML=`<h3>${esc(t.t)}</h3><div class="big" id="sosCd" style="font-size:64px">02:00</div><div>${sb.map((s,i)=>`<div><input type="checkbox" class="chk" ${s.d?'checked':''} onchange="tickSub(${t.id},${i});draw2()"> ${esc(s.t)}</div>`).join('')}</div><button class="fb" onclick="smallerStill(${t.id})">Still can't start</button><button class="fb" onclick="more()">+5 more minutes</button><button class="fb" onclick="closeSos()">Stop for now — that's okay</button><p><a style="color:var(--au)" target="_blank" href="https://www.youtube.com/results?search_query=study+with+me+body+doubling">Find a body-doubling video</a></p>`};
+ window.draw2=draw;window.more=()=>startSos(300);draw();startSos(120)}
+function startSos(s){clearInterval(sosT);const e=Date.now()+s*1000;sosT=setInterval(()=>{const r=Math.max(0,Math.round((e-Date.now())/1000)),c=$('#sosCd');if(c)c.textContent=fmt(r);if(!r){clearInterval(sosT);beep();toast(s>120?'Five more minutes done. Keep going, or stop — both are fine.':'Two minutes done. Another five, or stop — both are fine.')}},500)}
+function smallerStill(id){const t=S.tasks.find(x=>x.id==id);t.subs.unshift({t:pick(['Take one slow breath','Put your hand on the mouse','Look at the first word']),d:false});save();window.draw2()}
+function closeSos(){clearInterval(sosT);$('#sos').style.display='none';render()}
+$('#sosBtn').onclick=openSos;
+
+
+function nav(v){$$('.view').forEach(x=>x.classList.toggle('on',x.id==v));$$('nav [data-v]').forEach(b=>b.classList.toggle('on',b.dataset.v==v))}
+$$('nav [data-v]').forEach(b=>b.onclick=()=>nav(b.dataset.v));
+
+// ===== Surprise scheduler =====
+const dk=()=>new Date(Date.now()-216e5).toDateString();
+const nowM=()=>{const d=new Date(Date.now()-216e5);d.setHours(0,0,0,0);return(Date.now()-d.getTime())/6e4};
+const tmin=s=>{const[h,m]=s.split(':').map(Number);return h*60+m};
+const rng=(a,b)=>{const x=hm(a),y=hm(b);return x.slice(-2)==y.slice(-2)?x.slice(0,-3)+'–'+y:x+'–'+y};
+const hm=m=>{m=Math.round(m)%1440;return fm(Math.floor(m/60)+':'+(m%60))};
+const SL=()=>S.plan.L,nextSlot=s=>SL()[SL().indexOf(s)+1];
+function buildSlots(fxs,old,c0){const END=1530,L=old.slice(),
+ fx=fxs.map(f=>{let a=tmin(f.s),b=tmin(f.e);if(a<360){a+=1440;b+=1440}if(b<=a)b+=1440;return{n:f.n,s:a,e:b}}).sort((x,y)=>x.s-y.s),
+ put=(k,s,e,n)=>L.push({k,s,e,n,st:'lock',it:[]});let c=c0;
+ while(c<END){const f=fx.find(x=>x.s<=c&&x.e>c);if(f){put('fx',c,f.e,f.n);c=f.e;continue}
+  const nx=fx.find(x=>x.s>c),lim=Math.min(nx?nx.s:END,END),g=lim-c;
+  if(g<20){if(g>0)put('free',c,lim,'Free time');c=lim;continue}
+  const sl=Math.min(90,g);put('study',c,c+sl);c+=sl;
+  if(c<lim){const b=Math.min(30,lim-c);put('break',c,c+b,'Break');c+=b}}
+ return L}
+function mkPlan(){const old=S.plan&&S.plan.d==dk()?S.plan.L.filter(x=>x.s<=nowM()):[],c=old.length?Math.max(Math.ceil(nowM()/5)*5,...old.map(x=>x.e)):540;
+ S.plan={d:dk(),L:buildSlots(S.fx.filter(f=>!f.tm),old,c)};assign();save()}
+function pack(sl,tasks,hold,seed){const pool=tasks.filter(t=>!t.done).map(t=>({t,r:t.rem-hold.filter(i=>i.id==t.id).reduce((a,i)=>a+i.m,0),k:({High:0,Medium:1,Low:2}[t.pri]??1)+hs(seed?t.id+'~'+seed:t.id)*(seed?3:1.6)})).filter(p=>p.r>0).sort((a,b)=>a.k-b.k),
+ over=pool.reduce((a,p)=>a+p.r,0)>sl.reduce((a,s)=>a+s.e-s.s,0);
+ sl.forEach(s=>{s.it=[];let c=s.e-s.s;[0,1].forEach(ps=>pool.forEach(p=>{if(c<10||p.r<=0||(s.ban||[]).includes(p.t.id)||s.it.some(i=>i.id==p.t.id))return;
+  if(ps==0&&((p.r>c&&p.r<=90)||(p.r>90&&c<60)))return;if(ps==1&&s.it.length&&!over)return;
+  const m=Math.min(p.r,c);s.it.push({id:p.t.id,m,t:p.t.t});p.r-=m;c-=m}))});
+ return pool.filter(p=>p.r>0).map(p=>({id:p.t.id,t:p.t.t,r:p.r}))}
+function assign(){if(!S.plan)return;const L=SL(),n=nowM(),re=x=>x.k=='study'&&x.st=='lock'&&(!x.it.length||(!x.rev&&n<x.s)),sl=L.filter(re),
+ hold=L.filter(x=>x.k=='study'&&!re(x)&&['lock','act','end'].includes(x.st)).flatMap(x=>x.it);
+ S.plan.nofit=pack(sl,S.tasks.filter(t=>t.day=='today'),hold,S.seed)}
+const hs=id=>String(id).split('').reduce((a,c)=>(a*31+c.charCodeAt(0))>>>0,7)%997/997;
+const hmn=m=>m>=60?Math.floor(m/60)+'h'+(m%60?' '+m%60+'m':''):m+' min';
+function tomorrowPlan(){const L=buildSlots(S.fx.filter(f=>f.rep||f.tm),[],540),sl=L.filter(x=>x.k=='study'),
+ nofit=pack(sl,S.tasks.filter(t=>t.day=='tomorrow'),[],S.shuf),cap=sl.reduce((a,s)=>a+s.e-s.s,0),used=sl.reduce((a,s)=>a+s.it.reduce((b,i)=>b+i.m,0),0);
+ return{L,nofit,cap,used,free:cap-used}}
+function capText(t){const x=t.nofit.reduce((a,p)=>a+p.r,0);return hmn(t.used)+' planned of '+hmn(t.cap)+' study time · '+hmn(t.free)+' free'+(x?' · '+hmn(x)+" won't fit":'')}
+function hk(){const L=SL(),n=nowM();let ch=0;L.forEach((x,i)=>{if(x.k!='study')return;if(x.st=='lock'&&n>=x.e){x.st='skip';ch=1}
+ if(x.st=='end'){const nx=L.slice(i+1).find(y=>y.k=='study');if(nx&&n>=nx.s){x.st='skip';ch=1}}});
+ if(ch||L.some(x=>x.k=='study'&&x.st=='lock'&&!x.it.length&&n<x.e))assign()}
+function focusSlot(){const n=nowM(),L=SL();return L.find(x=>x.k=='study'&&x.st=='act')||L.find(x=>x.k=='study'&&x.st=='end'&&n<x.e+60)||L.find(x=>x.k=='study'&&x.st=='lock'&&(x.rev||(n>=x.s&&n<x.e)))||null}
+function pushTomorrow(){(S.plan.nofit||[]).forEach(x=>{const t=S.tasks.find(y=>y.id==x.id);if(!t)return;if(x.r>=t.rem)t.day='tomorrow';else{t.rem-=x.r;S.tasks.push({...t,id:uid(),day:'tomorrow',rem:x.r,min:x.r,subs:[],done:false})}});assign();save();render()}
+const fk=f=>{const a=tmin(f.s);return a<360?a+1440:a};
+function addFx(){const n=$('#fn').value.trim(),s=$('#fs').value,e=$('#fe').value;if(!n||!s||!e)return toast('Add a name, a start time and an end time.');if(s==e)return toast('Start and end times must be different.');S.fx.push({id:uid(),n,s,e,rep:$('#fr').checked?1:0,tm:$('#fr').checked?0:1});['#fn','#fs','#fe'].forEach(x=>$(x).value='');mkPlan();render()}
+function delFx(i){S.fx.splice(i,1);mkPlan();render()}
+function shuffleTmr(){if(S.tasks.filter(t=>t.day=='tomorrow'&&!t.done).length<2)return toast('Add at least two missions for tomorrow to shuffle them.');
+ const sig=()=>tomorrowPlan().L.map(x=>x.it.map(i=>i.id+':'+i.m).join(',')).join('|'),b=sig();
+ for(let i=0;i<12;i++){S.shuf=1+Math.floor(Math.random()*1e6);if(sig()!=b)break}
+ if(sig()==b)toast('That is the only order that fits tomorrow.');save();render()}
+function nextFirst(){const n=nowM(),x=SL().find(y=>y.k=='study'&&y.e>n&&y.it.length);return x?x.it[0].t:''}
+// ----- breaks: a fresh, non-repeating idea every time -----
+const LIB=['Fill your water bottle and drink a full glass','Stretch your neck, shoulders and back for 5 minutes','Look out of a window at something far away and let your eyes rest','Make tea or coffee and drink it without your phone','Play one favourite song and dance badly','Tidy one small corner of your desk','Eat a snack or some fruit, slowly','Lie down, close your eyes, take 10 slow breaths','Text a friend something kind','Wash your face and freshen up','Do 20 squats and 10 push-ups','Step outside for fresh air and sunlight','Doodle freely for 10 minutes','Sit somewhere comfy and do absolutely nothing'];
+function bkPool(){const B=S.bk;return[...B.def.map(d=>({id:d.id,t:d.t,need:d.need||0})),...B.ex.filter(x=>x.day==dk()).map(d=>({id:d.id,t:d.t,need:1})),...LIB.map((t,i)=>({id:'L'+i,t,need:0}))]}
+function pickBreak(avoid){const B=S.bk;if(B.day!=dk()){B.day=dk();B.cnt={};B.used=[];B.ex=B.ex.filter(x=>x.day==dk())}
+ const P=bkPool(),last=B.used[B.used.length-1],left=Math.max(1,SL().filter(x=>x.k=='break'&&x.e>nowM()).length),owed=P.reduce((a,p)=>a+Math.max(0,p.need-(B.cnt[p.id]||0)),0),
+ must=P.filter(p=>p.need>(B.cnt[p.id]||0)&&p.id!=last&&p.id!=avoid),fresh=P.filter(p=>!B.used.includes(p.id)&&p.id!=avoid);
+ const c=must.length&&(owed>=left||Math.random()<.5)?pick(must):pick(fresh.length?fresh:P.filter(p=>p.id!=last&&p.id!=avoid));
+ B.cnt[c.id]=(B.cnt[c.id]||0)+1;B.used.push(c.id);return{id:c.id,t:c.t}}
+function addBd(){const t=$('#bd').value.trim();if(!t)return;S.bk.def.push({id:'d'+uid(),t,need:0});$('#bd').value='';save();render()}
+// ----- rendering -----
+function lab(i,L){const a=(L||SL()).filter(x=>x.k=='study'&&x.st!='skip').flatMap(x=>x.it).filter(y=>y.id==i.id),k=a.indexOf(i);return a.length>1&&k>=0?` (${k+1}/${a.length})`:''}
+const studyTxt=(x,L)=>x.it.map(y=>esc(y.t)+lab(y,L)).join(' + ')||'Free';
+const rowTxt=(x,L)=>x.k=='fx'?esc(x.n):x.k=='break'?'Rest':x.k=='free'?'Free':studyTxt(x,L);
+function planRow(x){const n=nowM(),cur=n>=x.s&&n<x.e,old=x.e<=n&&!x.ck;
+ return `<div class="task${cur?' slot':''}${old?' old':''}"><input type="checkbox" class="chk" ${x.ck?'checked':''} onchange="tickPlan(${SL().indexOf(x)})"><span class="small">${rng(x.s,x.e)}</span> <span class="${x.ck?'done':''}">${rowTxt(x,SL())}</span></div>`}
+function completeSlot(s){s.st='done';s.ck=true;s.it.forEach(i=>{const k=S.tasks.find(y=>y.id==i.id);if(k){k.rem-=i.m;if(k.rem<=0&&!k.done)finish(k)}});assign()}
+function tickPlan(i){const x=SL()[i];if(!x)return;x.ck=!x.ck;if(x.ck&&x.k=='study'&&['lock','act','end'].includes(x.st))completeSlot(x);save();render()}
+function panel(){const f=focusSlot();$('#ftask').textContent=f&&f.st!='end'?f.it.map(y=>y.t+lab(y)).join(' + '):'';$('#pbtn').textContent=T().endAt?'⏸':'▶'}
+function render(){rollover();if(!S.plan||S.plan.d!=dk())mkPlan();hk();panel();const L=SL().filter(x=>x.e>x.s),st=L.filter(x=>x.k=='study'),dn=st.filter(x=>x.ck).length;
+ $('#mission').innerHTML=L.map(planRow).join('');
+ const tp=tomorrowPlan();$('#tmr').innerHTML=tp.L.filter(x=>x.e>x.s).map(x=>`<div class="task"><span class="small">${rng(x.s,x.e)}</span> ${rowTxt(x,tp.L)}</div>`).join('');$('#cap').textContent=capText(tp);$('#mcount').textContent=dn+' of '+st.length+' done';
+ $('#tl').innerHTML=S.tasks.map(t=>`<div class="li"><span class="${t.done?'done':''}">${esc(t.t)}</span><span class="small">${hmn(t.min)}${t.day=='today'?' · today':''}</span><span class="pr ${t.pri}">${t.pri}</span><button class="fb" onclick="delTask(${t.id})">×</button></div>`).join('');
+ const nf=S.plan.nofit||[];$('#nofit').innerHTML=nf.length?`<div class="bub" style="font-style:normal">⚠️ Won't fit today: ${nf.map(x=>esc(x.t)+' ('+hmn(x.r)+')').join(', ')}. <button class="fb" onclick="pushTomorrow()">Move to tomorrow</button></div>`:'';
+ $('#fxl').innerHTML=S.fx.map((f,i)=>({f,i})).sort((p,q)=>fk(p.f)-fk(q.f)).map(({f,i})=>`<div class="li"><span>${esc(f.n)}</span><span class="small">${rng(tmin(f.s),tmin(f.e)<=tmin(f.s)?tmin(f.e)+1440:tmin(f.e))}${f.rep?'':f.tm?' · tomorrow only':' · today only'}</span><button class="fb" onclick="delFx(${i})">×</button></div>`).join('');
+ S.bk.ex=S.bk.ex.filter(x=>x.day==dk());
+ $('#bdl').innerHTML=S.bk.def.map((d,i)=>`<div class="li"><span>${esc(d.t)}</span><button class="fb" onclick="S.bk.def.splice(${i},1);save();render()">×</button></div>`).join('');
+ const bc=S.brk&&S.bk.cur;$('#bact').textContent=bc?bc.t:'Break Task Coming Soon';$('#bact').classList.toggle('done',!!(bc&&bc.done));$('#bdb').style.display=bc?'':'none';$('#bdb').textContent=bc&&bc.done?'Done ✓':'Done';$('#bdb').disabled=!!(bc&&bc.done);
+ renderComp();
+ $('#pl').innerHTML=S.park.map((p,i)=>`<div class="task">${esc(p.t)} <button class="fb" onclick="S.park.splice(${i},1);save();render()">Delete</button></div>`).join('')||'<p class="small">Nothing parked.</p>';
+ save()}
+document.addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey||e.altKey)return;
+ if(e.key=='Escape'){closeFocus();closeSos();return}
+ const tg=e.target.tagName;if(/INPUT|TEXTAREA|SELECT/.test(tg))return;
+ const sosOn=$('#sos').style.display=='flex',focOn=$('#focus').style.display=='flex',k=e.key.toLowerCase();
+ if(sosOn)return;
+ if(e.code=='Space'){if(tg=='BUTTON'||tg=='A')return;if(!focOn&&!$('#dash').classList.contains('on'))return;e.preventDefault();pauseT();return}
+ if(k=='f')openFocus();if(k=='s')openSos()});
+render();tick();setTimeout(()=>say('open',1),1200);
+if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+</script></body></html>
